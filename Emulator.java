@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,10 +26,20 @@ public class Emulator {
         initializeEmulator();
     }
 
+    /**
+     * initialize the emulator, make PC, register table, and memory become zeros. 
+     */
     public void initializeEmulator() {
         this.PC = 0;
         initializeRegTable();
         initializeMemory();
+    }
+
+    //set up register name id (String name, int id)
+    private void setUpRegisterNameId() {
+        for (int i = 0; i < SUPPORTED_REGS_NUM; i++) {
+            registerNameToId.put(SUPPORTED_REG_LIST[i], i);
+        }
     }
 
     private void initializeRegTable() {
@@ -48,48 +56,62 @@ public class Emulator {
         return PC;
     }
 
-    public void movePC(int move) {
-        PC += move;
+    public void setPC(int PC) {
+        this.PC = PC;
     }
 
+    /**
+     * change the value for a given register
+     * @param regName register name e.g $t0
+     * @param value update value for the register
+     */
     public void writeReg(String regName, int value) {
         registerIdToValue.replace(registerNameToId.get(regName), value);
     }
 
+    /**
+     * Integer value of a register ("$t0" -> 0)
+     * @param regName register name
+     * @return register value
+     */
     public int readReg(String regName) {
         return registerIdToValue.get(registerNameToId.get(regName));
     }
 
-    public int[] readMemory(int low, int high) {
-        if (isOutOfBound(low) || isOutOfBound(high)) {
+    /**
+     * return the memory data between low and high (included)
+     * @param low lower bound of the memory
+     * @param high higher bound of the memory
+     * @return int array contains data between low and high in the memory
+     */
+    public int[] getMemory(int low, int high) {
+        if (isOutOfBound(low) || isOutOfBound(high) || low > high) {
             return null;
         }
-        if (low > high) {
-            return null;
+        if (low == high) {
+            int [] data = {memory[low]};
+            return data;
         }
         int[] memoryChunck = new int[high - low];
         for (int i = low; i < high; i++) {
-            memoryChunck[i] = memory[i];
+            memoryChunck[i - low] = memory[i];
         }
         return memoryChunck;
     }
 
+    /**
+     * store the value to the address in memory
+     * @param address address of memory
+     * @param value value to be put in the address of memory
+     */
     public void storeMemory(int address, int value) {
-        if (isOutOfBound(address)) {
-
-        } else {
+        if (!isOutOfBound(address)) 
             memory[address] = value;
-        }
     }
 
     private boolean isOutOfBound(int address) {
         return (address < 0 || address >= MEM_SIZE);
     }
 
-    private void setUpRegisterNameId() {
-        for (int i = 0; i < SUPPORTED_REGS_NUM; i++) {
-            registerNameToId.put(SUPPORTED_REG_LIST[i], i);
-        }
-    }
 
 }
