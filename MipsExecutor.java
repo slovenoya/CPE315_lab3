@@ -120,7 +120,14 @@ public class MipsExecutor {
             int rt = emulator.readReg(tokens[2]);
             emulator.writeReg(rd, rs | rt);
             emulator.incrementPC();
-        } 
+        } else if (instruction.startsWith("and")) {
+            String[] tokens = getTokens(instruction);
+            String rd = tokens[0];
+            int rs = emulator.readReg(tokens[1]);
+            int rt = emulator.readReg(tokens[2]);
+            emulator.writeReg(rd, rs & rt);
+            emulator.incrementPC();
+        }
     }
 
     /**
