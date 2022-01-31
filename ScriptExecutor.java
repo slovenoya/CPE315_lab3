@@ -14,7 +14,9 @@ public class ScriptExecutor {
         Scanner scanner = new Scanner(inputStream);
         System.out.print("mips> ");
         do {
-            executeScript(scanner.nextLine());
+	    String nextLine = scanner.nextLine();
+            System.out.println(nextLine);
+            executeScript(nextLine);
         } while (!terminate && scanner.hasNext());
         scanner.close();
     }
