@@ -10,7 +10,7 @@ import java.util.Map;
 public class Emulator {
     private static final String SUPPORTED_REGS = 
         "$0,$v0,$v1,$a0,$a1,$a2,$a3,$t0,$t1,$t2,$t3,"
-        + "$t4,$t5,$t6,$t7,$s1,$s2,$s3,$s4,$s5,$s6," 
+        + "$t4,$t5,$t6,$t7,$s0,$s1,$s2,$s3,$s4,$s5,$s6," 
         + "$s7,$t8,$t9,$sp,$ra";
     private static final String[] SUPPORTED_REG_LIST = SUPPORTED_REGS.split(",");
     private static final int SUPPORTED_REGS_NUM = SUPPORTED_REG_LIST.length;
@@ -58,6 +58,10 @@ public class Emulator {
 
     public void setPC(int PC) {
         this.PC = PC;
+    }
+
+    public void incrementPC() {
+        this.PC++;
     }
 
     /**
@@ -113,5 +117,16 @@ public class Emulator {
         return (address < 0 || address >= MEM_SIZE);
     }
 
+    public void printEmulator() {
+        System.out.println("pc = " + this.PC);
+        int i = 1;
+        for (String reg : SUPPORTED_REG_LIST) {
+            System.out.print(reg + " = " + readReg(reg) + "  ");
+            if (i % 4 == 0 || i == SUPPORTED_REGS_NUM) {
+                System.out.println();
+            }
+            i++;
+        }
+    }
 
 }
