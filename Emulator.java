@@ -96,8 +96,8 @@ public class Emulator {
             int [] data = {memory[low]};
             return data;
         }
-        int[] memoryChunck = new int[high - low];
-        for (int i = low; i < high; i++) {
+        int[] memoryChunck = new int[high - low + 1];
+        for (int i = low; i <= high; i++) {
             memoryChunck[i - low] = memory[i];
         }
         return memoryChunck;
